@@ -193,14 +193,17 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  width: 100%;
   margin-top: 1rem;
   padding: 0.8rem;
   background: #48bb78;
   color: white;
   text-decoration: none;
+  border: none;
   border-radius: 9px;
   font-weight: 600;
   font-size: 1.1rem;
+  cursor: pointer;
   transition: background 0.2s, transform 0.1s;
 }
 
