@@ -13,13 +13,12 @@ export default function Home() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [downloadUrl, setDownloadUrl] = useState('');
+  const [downloadBlob, setDownloadBlob] = useState(null);
   const [downloadName, setDownloadName] = useState('');
   const inputRef = useRef();
 
   const resetDownload = () => {
-    if (downloadUrl) URL.revokeObjectURL(downloadUrl);
-    setDownloadUrl('');
+    setDownloadBlob(null);
     setDownloadName('');
   };
 
@@ -49,6 +48,34 @@ export default function Home() {
     resetDownload();
   };
 
+  const handleDownload = async () => {
+    if (!downloadBlob) return;
+    if (typeof window !== 'undefined' && window.showSaveFilePicker) {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: downloadName,
+          types: [{
+            description: 'Excel Workbook',
+            accept: { 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'] },
+          }],
+        });
+        const writable = await handle.createWritable();
+        await writable.write(downloadBlob);
+        await writable.close();
+        return;
+      } catch (e) {
+        if (e.name === 'AbortError') return;
+      }
+    }
+    // Fallback para navegadores sin showSaveFilePicker (Firefox)
+    const url = URL.createObjectURL(downloadBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = downloadName;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   const handleProcess = async () => {
     if (!file || loading) return;
     setLoading(true);
@@ -70,9 +97,8 @@ export default function Home() {
       }
 
       const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
       const baseName = file.name.replace(/\.xlsx$/i, '');
-      setDownloadUrl(url);
+      setDownloadBlob(blob);
       setDownloadName(`${baseName}_LIBROS_MENSUALES.xlsx`);
     } catch (err) {
       setError(err.message);
@@ -134,14 +160,13 @@ export default function Home() {
               {loading ? 'Procesando...' : 'Generar Libro Mensual'}
             </button>
 
-            {downloadUrl && (
-              <a
-                href={downloadUrl}
-                download={downloadName}
+            {downloadBlob && (
+              <button
+                onClick={handleDownload}
                 className={styles.downloadLink}
               >
                 ⬇️ Descargar resultado (.xlsx)
-              </a>
+              </button>
             )}
 
             <div className={styles.instructions}>
