@@ -1,0 +1,30 @@
+Quiero crear una aplicación web para deployar en Vercel. La app tiene que hacer lo siguiente
+El usuario sube un archivo Excel (.xlsx) con el formato DOC RRHH que tiene 4 columnas Empleado, C.I. Nº, Concepto, Importe Credito. La app procesa ese archivo y genera un nuevo Excel (.xls) basado en una plantilla llamada MODELO LIBROS MENSUALES que ya tiene formato fijo del Ministerio de Trabajo de Paraguay (PERL023).
+Lógica de mapeo de conceptos
+
+77 Salario → columna Importe (salario). El Importe Unitario se calcula dividiendo el salario entre 22
+4 Aguinaldo → columna Aguinaldo (sumar si hay varios registros del mismo empleado)
+7 Bonificación Familiar → columna Bonif. Familiar
+619 Bonificacion Horas Trabajadas, 10 Comisiones, 1197 PLUS, 1177 Vacaciones no gozadas, 20 Indemnización CR, 14 Preaviso CR y cualquier otro concepto que no sea de los anteriores → columna Otros Beneficios (sumar todo)
+679 Honorarios Profesionales y 680 IVA → IGNORAR, ese empleado no va en el MODELO
+El Total General de cada empleado = Salario + Aguinaldo + Bonif. Familiar + Otros Beneficios
+Días trabajados 22, Horas trabajadas 198, Frecuencia de pago MENSUAL para todos
+Horas extras 50%, 100% e Importe 0 para todos
+
+Estructura del MODELO (columnas 0-indexed)
+
+Col 2 Nro, Col 4 Nombre, Col 5 Cédula
+Col 37 F.P., Col 38 Importe Unitario, Col 39 Días Trab., Col 40 Hrs. de Trab., Col 41 Importe (Salario)
+Col 42 HE 50%, Col 43 HE 100%, Col 44 HE Importe
+Col 45 Vacaciones, Col 46 Bonif. Familiar, Col 47 Aguinaldo, Col 48 Otros Beneficios, Col 49 Total General
+Los datos de empleados empiezan en la fila índice 17 (fila 18 en Excel)
+Las filas del MODELO ya tienen formato y celdas de asistencia (días 1-31) que se deben respetar y dejar como están
+
+Stack
+
+Vercel con funciones serverless (Node.js)
+Librería xlsx o exceljs para leer y escribir Excel
+Frontend simple una página con un botón para subir el archivo DOC RRHH y un botón para descargar el resultado
+La plantilla MODELO LIBROS MENSUALES debe estar incluida en el proyecto como archivo base
+
+Te adjunto el archivo MODELO base para que lo incluyas en el proyecto MODELO_LIBROS_MENSUALES_AMPLIFY_-_2.xls

@@ -1,0 +1,267 @@
+/* ── Wrapper (dark mode root) ── */
+.wrapper {
+  min-height: 100vh;
+  background: #eef2f7;
+  transition: background 0.3s;
+  position: relative;
+}
+
+.wrapper.dark {
+  background: #0f1117;
+}
+
+/* ── Layout ── */
+.main {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem 4rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+}
+
+/* ── Logo image ── */
+.logoImg {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  margin-bottom: 2rem;
+}
+
+/* ── Card ── */
+.card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 2rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.wrapper.dark .card {
+  background: #1e2130;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Dropzone ── */
+.dropzone {
+  border: 2px dashed #cbd5e0;
+  border-radius: 10px;
+  padding: 2rem 1.5rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  margin-bottom: 1.25rem;
+  user-select: none;
+}
+
+.dropzone:hover {
+  border-color: #667eea;
+  background: #f7f8ff;
+}
+
+.wrapper.dark .dropzone {
+  border-color: #4a5568;
+}
+
+.wrapper.dark .dropzone:hover {
+  border-color: #667eea;
+  background: #252d3d;
+}
+
+.dropzoneActive {
+  border-color: #667eea;
+  background: #f7f8ff;
+}
+
+.dropIcon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.dropText {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 0.2rem;
+  transition: color 0.3s;
+}
+
+.wrapper.dark .dropText {
+  color: #a0aec0;
+}
+
+.dropHint {
+  font-size: 0.95rem;
+  color: #a0aec0;
+}
+
+.wrapper.dark .dropHint {
+  color: #718096;
+}
+
+.fileName {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #2d3748;
+  word-break: break-all;
+  margin: 0;
+  transition: color 0.3s;
+}
+
+.wrapper.dark .fileName {
+  color: #e2e8f0;
+}
+
+.fileSize {
+  font-size: 0.92rem;
+  color: #718096;
+  margin-top: 0.25rem;
+}
+
+/* ── Error ── */
+.error {
+  background: #fff5f5;
+  border: 1px solid #feb2b2;
+  color: #c53030;
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.wrapper.dark .error {
+  background: #2d1515;
+  border-color: #742a2a;
+  color: #fc8181;
+}
+
+/* ── Primary button ── */
+.button {
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 9px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  letter-spacing: 0.01em;
+}
+
+.button:hover:not(:disabled) {
+  background: #5a67d8;
+  transform: translateY(-1px);
+}
+
+.button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.button:disabled {
+  background: #a0aec0;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Spinner ── */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Download link ── */
+.downloadLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: #48bb78;
+  color: white;
+  text-decoration: none;
+  border-radius: 9px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.downloadLink:hover {
+  background: #38a169;
+  transform: translateY(-1px);
+}
+
+/* ── Instructions ── */
+.instructions {
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.instructions h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #a0aec0;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.wrapper.dark .instructions h3 {
+  color: #4a5568;
+}
+
+.instructions ul {
+  list-style: none;
+  padding: 0;
+}
+
+.instructions li {
+  font-size: 0.95rem;
+  color: #718096;
+  padding: 0.2rem 0;
+  padding-left: 1rem;
+  position: relative;
+}
+
+.wrapper.dark .instructions li {
+  color: #718096;
+}
+
+.instructions li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: #cbd5e0;
+}
+
+/* ── Footer ── */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
