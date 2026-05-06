@@ -74,7 +74,13 @@
 
 .dropzoneActive {
   border-color: #667eea;
-  background: #f7f8ff;
+  background: #f0f3ff;
+  transform: scale(1.01);
+}
+
+.wrapper.dark .dropzoneActive {
+  border-color: #667eea;
+  background: #252d3d;
 }
 
 .dropIcon {
@@ -210,6 +216,48 @@
 .downloadLink:hover {
   background: #38a169;
   transform: translateY(-1px);
+}
+
+/* ── Progress bar ── */
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  margin-top: 0.75rem;
+  overflow: hidden;
+}
+
+.wrapper.dark .progressBar {
+  background: #2d3748;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 3px;
+  transition: width 0.25s ease;
+}
+
+/* ── Success message ── */
+.successMsg {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.65rem 0.9rem;
+  background: #f0fff4;
+  border: 1px solid #9ae6b4;
+  color: #276749;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.wrapper.dark .successMsg {
+  background: #1a2e23;
+  border-color: #276749;
+  color: #68d391;
 }
 
 /* ── Instructions ── */

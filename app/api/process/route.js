@@ -15,15 +15,16 @@ export async function POST(request) {
     }
 
     const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    const inputBuffer = Buffer.from(arrayBuffer);
 
-    const outputBuffer = await processRRHH(buffer);
+    const { buffer, count } = await processRRHH(inputBuffer);
 
-    return new NextResponse(outputBuffer, {
+    return new NextResponse(buffer, {
       status: 200,
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Content-Disposition': 'attachment; filename="LIBROS_MENSUALES.xlsx"',
+        'X-Employee-Count': String(count),
       },
     });
   } catch (error) {

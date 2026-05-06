@@ -15,11 +15,16 @@ export default function Home() {
   const [error, setError] = useState('');
   const [downloadBlob, setDownloadBlob] = useState(null);
   const [downloadName, setDownloadName] = useState('');
+  const [employeeCount, setEmployeeCount] = useState(0);
+  const [dragOver, setDragOver] = useState(false);
+  const [progress, setProgress] = useState(0);
   const inputRef = useRef();
 
   const resetDownload = () => {
     setDownloadBlob(null);
     setDownloadName('');
+    setEmployeeCount(0);
+    setProgress(0);
   };
 
   const handleFileChange = (e) => {
@@ -35,8 +40,18 @@ export default function Home() {
     resetDownload();
   };
 
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    if (!e.currentTarget.contains(e.relatedTarget)) setDragOver(false);
+  };
+
   const handleDrop = (e) => {
     e.preventDefault();
+    setDragOver(false);
     const f = e.dataTransfer.files?.[0];
     if (!f) return;
     if (!f.name.toLowerCase().endsWith('.xlsx')) {
@@ -67,7 +82,6 @@ export default function Home() {
         if (e.name === 'AbortError') return;
       }
     }
-    // Fallback para navegadores sin showSaveFilePicker (Firefox)
     const url = URL.createObjectURL(downloadBlob);
     const a = document.createElement('a');
     a.href = url;
@@ -81,6 +95,13 @@ export default function Home() {
     setLoading(true);
     setError('');
     resetDownload();
+
+    let p = 0;
+    const interval = setInterval(() => {
+      p += Math.random() * 12 + 3;
+      if (p > 85) p = 85;
+      setProgress(Math.round(p));
+    }, 250);
 
     try {
       const formData = new FormData();
@@ -96,11 +117,18 @@ export default function Home() {
         throw new Error(data.error || `Error al procesar (${res.status})`);
       }
 
+      clearInterval(interval);
+      setProgress(100);
+
+      const count = parseInt(res.headers.get('X-Employee-Count') || '0', 10);
       const blob = await res.blob();
       const baseName = file.name.replace(/\.xlsx$/i, '');
       setDownloadBlob(blob);
       setDownloadName(`${baseName}_LIBROS_MENSUALES.xlsx`);
+      setEmployeeCount(count);
     } catch (err) {
+      clearInterval(interval);
+      setProgress(0);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -119,10 +147,11 @@ export default function Home() {
 
           <div className={styles.card}>
             <div
-              className={styles.dropzone}
+              className={`${styles.dropzone} ${dragOver ? styles.dropzoneActive : ''}`}
               onClick={() => inputRef.current?.click()}
               onDrop={handleDrop}
-              onDragOver={(e) => e.preventDefault()}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && inputRef.current?.click()}
@@ -142,8 +171,8 @@ export default function Home() {
                 </>
               ) : (
                 <>
-                  <div className={styles.dropIcon}>⬆️</div>
-                  <p className={styles.dropText}>Haga clic para seleccionar</p>
+                  <div className={styles.dropIcon}>{dragOver ? '📂' : '⬆️'}</div>
+                  <p className={styles.dropText}>{dragOver ? 'Soltar archivo aquí' : 'Haga clic para seleccionar'}</p>
                   <p className={styles.dropHint}>Archivo DOC RRHH (.xlsx)</p>
                 </>
               )}
@@ -160,13 +189,21 @@ export default function Home() {
               {loading ? 'Procesando...' : 'Generar Libro Mensual'}
             </button>
 
+            {loading && (
+              <div className={styles.progressBar}>
+                <div className={styles.progressFill} style={{ width: `${progress}%` }} />
+              </div>
+            )}
+
             {downloadBlob && (
-              <button
-                onClick={handleDownload}
-                className={styles.downloadLink}
-              >
-                ⬇️ Descargar resultado (.xlsx)
-              </button>
+              <>
+                <div className={styles.successMsg}>
+                  ✓ {employeeCount} empleado{employeeCount !== 1 ? 's' : ''} procesado{employeeCount !== 1 ? 's' : ''} correctamente
+                </div>
+                <button onClick={handleDownload} className={styles.downloadLink}>
+                  ⬇️ Descargar resultado — {employeeCount} empleado{employeeCount !== 1 ? 's' : ''}
+                </button>
+              </>
             )}
 
             <div className={styles.instructions}>
