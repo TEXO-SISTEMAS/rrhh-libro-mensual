@@ -4,3 +4,5 @@ node_modules/
 *.xls.tmp
 resultado_test.xls
 *.xlsx
+!template/*.xlsx
+.claude/
